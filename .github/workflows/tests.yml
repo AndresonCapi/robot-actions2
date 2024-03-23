@@ -33,7 +33,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Browser Init
+    - name: Browser Inits
       run: rfbrowser init
 
     - name: Run E2E Tests
