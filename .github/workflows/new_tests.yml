@@ -59,8 +59,8 @@ jobs:
     - name: Notify Slack
       if: always() # Sempre enviar notificação, independentemente do sucesso ou falha dos testes
       env:
-          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       run: |
           TEST_STATUS="Success"
-          if [[ "${{steps.test-results.outcome}}" != "success" ]]; then TEST_STATUS="Failure"; fi
+          if [[ "${{ steps.test-results.outcome }}" != "success" ]]; then TEST_STATUS="Failure"; fi
           curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Test results: *${TEST_STATUS}*. Check the details at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" $SLACK_WEBHOOK_URL
