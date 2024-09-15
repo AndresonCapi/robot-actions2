@@ -4,10 +4,14 @@
 name: New E2E Tests
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Comando de execução'
+        required: true
+        default: robot -d ./logs smoke tests
+
 
 jobs:
   tests:
