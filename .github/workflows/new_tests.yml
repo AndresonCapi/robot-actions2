@@ -38,7 +38,7 @@ jobs:
       run: rfbrowser init
     
     - name: Run E2E Tests
-      run: robot -d ./logs -i smoke tests
+      run: robot -d ./logs smoke tests
 
     - name: Robot Reporter
       uses: joonvena/robotframework-reporter-action@v2.4
@@ -51,3 +51,12 @@ jobs:
       with:
         name: Test report
         path: logs
+    
+    - name: Notify Slack
+      if: always() # Sempre enviar notificação, independentemente do sucesso ou falha dos testes
+      env:
+          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+      run: |
+          TEST_STATUS="Success"
+          if [[ "${{steps.test-results.outcome}}" != "success" ]]; then TEST_STATUS="Failure"; fi
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Test results: *${TEST_STATUS}*. Check the details at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" $SLACK_WEBHOOK_URL
